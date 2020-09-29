@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Inherit
+
 pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/utils/Address.sol";
