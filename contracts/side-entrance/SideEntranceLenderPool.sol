@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Inherit
+
 pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -30,4 +32,3 @@ contract SideEntranceLenderPool {
         require(address(this).balance >= balanceBefore, "Flash loan hasn't been paid back");        
     }
 }
- 
